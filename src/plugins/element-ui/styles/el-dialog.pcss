@@ -1,0 +1,12 @@
+.el-dialog {
+  width: calc(100vw - 40px);
+  max-width: 1200px;
+
+  & .el-dialog__title {
+    font-weight: 400;
+  }
+
+  @nest [data-darkmode='true'] & {
+    box-shadow: none;
+  }
+}

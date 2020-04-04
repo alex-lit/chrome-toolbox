@@ -1,0 +1,17 @@
+.el-input {
+  &--prefix {
+    & .el-input__prefix {
+      width: 25px;
+    }
+  }
+
+  & .el-input__inner {
+    &[invalid] {
+      border-color: var(--color--danger);
+    }
+  }
+
+  & .el-input__count-inner {
+    background-color: transparent !important;
+  }
+}

@@ -1,0 +1,15 @@
+.el-select-dropdown {
+  @nest [data-darkmode='true'] & {
+    box-shadow: none;
+  }
+
+  & .el-select-dropdown__item {
+    &.selected {
+      font-weight: 300;
+    }
+  }
+
+  & .el-select-dropdown__empty {
+    padding: 10px;
+  }
+}

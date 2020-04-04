@@ -1,0 +1,13 @@
+html {
+  &[data-darkmode='true'] {
+    background-color: var(--black);
+    filter: var(--filter-darkmode);
+
+    & img,
+    & .nuxt__build_indicator,
+    & #webpack-hot-middleware-clientOverlay,
+    & [ignore-darkmode] {
+      filter: var(--filter-darkmode--reverse);
+    }
+  }
+}

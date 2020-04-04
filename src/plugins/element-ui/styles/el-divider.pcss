@@ -1,0 +1,13 @@
+.el-divider {
+  opacity: 1;
+
+  & .el-divider__text {
+    transition-duration: 0.3s;
+
+    @nest [class*='el-loading-parent'] & {
+      opacity: 0;
+      transform: translate(10px, -50%);
+      transition-duration: 0s;
+    }
+  }
+}

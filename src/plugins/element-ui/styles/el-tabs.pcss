@@ -1,0 +1,34 @@
+.el-tabs {
+  &--border-card {
+    box-shadow: none;
+  }
+
+  & .el-tabs__item {
+    user-select: none;
+  }
+
+  &--margined {
+    & > .el-tabs__header {
+      padding: 0 20px;
+
+      & .el-tabs__item {
+        background-image: linear-gradient(
+          to bottom,
+          var(--white),
+          var(--white)
+        );
+        background-repeat: no-repeat;
+      }
+    }
+  }
+
+  .el-tabs__active-bar {
+    height: 1px;
+  }
+
+  .el-tabs__nav-wrap {
+    &::after {
+      height: 1px;
+    }
+  }
+}

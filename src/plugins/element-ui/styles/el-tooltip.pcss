@@ -1,0 +1,14 @@
+.el-tooltip {
+}
+
+.el-tooltip__popper {
+  max-width: calc(100vw - 20px);
+
+  @media screen and (--mobile) {
+    display: none !important;
+  }
+
+  @nest [data-darkmode='true'] & {
+    filter: var(--filter-darkmode--reverse);
+  }
+}

@@ -1,0 +1,55 @@
+.el-table {
+  overflow: initial;
+
+  & .el-table__header {
+    & .cell {
+      white-space: nowrap;
+    }
+  }
+
+  & .el-table__body {
+    & .current-row {
+      & > td {
+        background-color: var(--yellow--50);
+      }
+    }
+  }
+
+  & .el-table__row {
+    & .cell {
+      font-weight: 300;
+    }
+  }
+
+  & .el-table__expand-column {
+    /* pointer-events: none; */
+  }
+
+  & .el-table__expand-icon {
+    /* pointer-events: initial; */
+
+    &:hover {
+      /* color: var(--color--primary); */
+    }
+  }
+
+  & .el-table__expanded-cell {
+    @media screen and (--mobile) {
+      padding: 20px;
+    }
+  }
+
+  & .el-table__body-wrapper {
+    & .el-table__row {
+      /* cursor: pointer; */
+
+      & td {
+        vertical-align: top;
+      }
+
+      & .cell {
+        white-space: normal;
+      }
+    }
+  }
+}
