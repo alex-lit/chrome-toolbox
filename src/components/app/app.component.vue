@@ -1,19 +1,17 @@
 <script lang="ts">
-  import { Component, Vue, Watch } from 'vue-property-decorator';
+  import { Component, Vue } from 'vue-property-decorator';
 
-  import { CardLocation, CardUserInfo } from '@/components/cards';
-
-  @Component({
-    components: {
-      CardUserInfo,
-      CardLocation,
-    },
-  })
+  @Component
   export default class App extends Vue {
     /**
      * Информация о текущей геолокации пользователя
      */
     info: { [key: string]: any } = {};
+
+    /**
+     * Статус опроса
+     */
+    status: 'notInit' | 'pending' | 'end' = 'notInit';
 
     /**
      * Предупреждение о том что локация пользователя находится в России
@@ -23,56 +21,115 @@
       return this.info?.country_code2 === 'RU';
     }
 
-    @Watch('isDanger')
-    onDanger(newValue) {
-      if (newValue) {
-        this.$alert(
-          'Ваш IP находится в России, проверьте VPN подключение',
-          'Внимание!',
-          {
-            confirmButtonText: 'Вот черт...',
-            type: 'error',
-          },
-        );
+    /**
+     * Цвет заливки фона
+     */
+    get background(): string {
+      const neutral = 'linear-gradient(45deg, var(--gray), var(--blue-gray))';
+      const danger = 'linear-gradient(45deg, var(--red), var(--deep-orange))';
+      const success = 'linear-gradient(45deg, var(--green), var(--lime))';
+
+      switch (this.status) {
+        case 'notInit':
+          return neutral;
+        case 'pending':
+          return neutral;
+        case 'end':
+          return this.isDanger ? danger : success;
+
+        default:
+          return neutral;
       }
     }
 
-    created() {
+    /**
+     * Получает данные
+     */
+    getData() {
+      this.status = 'pending';
       fetch(
         'https://api.ipgeolocation.io/ipgeo?apiKey=867fb994ce904555b8ab1d42e1b1a59b&lang=ru',
       )
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
           this.info = data;
+        })
+        .finally(() => {
+          this.status = 'end';
         });
+    }
+
+    created() {
+      this.getData();
     }
   }
 </script>
 
 <template>
-  <div id="app" class="app">
-    <card-user-info></card-user-info>
-
-    <card-location
-      :info="{
-        Страна: info.country_name,
-        Город: info.city,
-        Район: info.district,
-        'Код страны': info.country_code2,
-        country_flag: info.country_flag,
-      }"
-    ></card-location>
+  <div
+    id="app"
+    v-loading="status !== 'end'"
+    class="app"
+    :style="{ backgroundImage: background }"
+  >
+    <header v-if="status !== 'end'" class="app__heading">
+      <i class="app__heading-smile">
+        ...
+      </i>
+      <p class="app__heading-title">
+        Проверка VPN подключения...
+      </p>
+      <p class="app__heading-subtitle">
+        ...
+      </p>
+    </header>
+    <header v-else class="app__heading">
+      <i class="app__heading-smile">
+        {{ isDanger ? ':(' : ':)' }}
+      </i>
+      <p class="app__heading-title">
+        {{ isDanger ? 'VPN не подключен' : 'VPN подключен' }}
+      </p>
+      <p class="app__heading-subtitle">
+        <i class="el-icon-map-location"></i>
+        {{ info.country_name }}, {{ info.city }}
+      </p>
+    </header>
   </div>
 </template>
 
 <style lang="postcss">
   .app {
-    display: grid;
+    display: flex;
     min-height: 100vh;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
     padding: 40px;
     background-color: var(--gray--100);
-    grid-gap: 20px;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    transition-duration: 0.3s;
+  }
+
+  .app__heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--white);
+  }
+
+  .app__heading-smile {
+    display: block;
+    margin-bottom: 0.2em;
+    font-size: 24vmin;
+    font-style: normal;
+  }
+
+  .app__heading-title {
+    margin-bottom: 0.3em;
+    font-size: 8vmin;
+  }
+
+  .app__heading-subtitle {
+    font-size: 1rem;
+    opacity: 0.8;
   }
 </style>
