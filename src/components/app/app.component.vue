@@ -18,7 +18,9 @@
      */
     get isDanger(): boolean {
       // eslint-disable-next-line camelcase
-      return this.info?.city === 'Севастополь';
+      return ['Севастополь', 'Sevastopol', 'Sebastopol'].includes(
+        this.info?.city,
+      );
     }
 
     /**
